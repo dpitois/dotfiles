@@ -1,6 +1,20 @@
 [user]
 	name = David PITOIS
 	email = {{ .email }}
+	{{- if (index . "sign_commits") }}
+	signingkey = ~/.ssh/id_ed25519.pub
+	{{- end }}
+
+[gpg]
+	format = ssh
+
+[commit]
+	{{- if (index . "sign_commits") }}
+	gpgsign = true
+	{{- end }}
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/
 
 [alias]
 	c = "!git fetch --all --prune && git status -sb"

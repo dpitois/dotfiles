@@ -13,6 +13,26 @@ if [ -f ~/.dotfiles/aliases.bash ]; then
 	. ~/.dotfiles/aliases.bash
 fi
 
+# SSH Agent management
+SSH_ENV="$HOME/.ssh/agent-env"
+
+function start_agent {
+    ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    ssh-add ~/.ssh/id_ed25519
+}
+
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    ssh-add -l > /dev/null 2>&1
+    if [ $? -eq 2 ]; then
+        start_agent
+    fi
+else
+    start_agent
+fi
+
 # if [ -f ~/.dotfiles/git.helpers.bash ]; then
 #   . ~/.dotfiles/git.helpers.bash
 # fi
