@@ -47,6 +47,18 @@ fi
 
 unset rc
 
+# FZF if available
+if type fzf &>/dev/null; then
+	export FZF_ALT_C_OPTS="
+		--walker-skip .git,node_modules,target
+		--preview 'tree -C {}'"
+	export FZF_CTRL_T_OPTS="
+		--walker-skip .git,node_modules,target
+		--preview 'bat -n --color=always {}'
+		--bind 'ctrl-/:change-preview-window(down|hidden|)'"
+	eval "$(fzf --bash)"
+fi
+
 {{- if .is_work }}
 # pnpm
 export PNPM_HOME="/home/dpi/.local/share/pnpm"
@@ -66,8 +78,12 @@ export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 
 # Added by get-aspire-cli.sh
-export PATH="$HOME/.aspire/bin:$PATH"
+if type aspire &>/dev/null; then
+	export PATH="$HOME/.aspire/bin:$PATH"
+fi
 
 # opencode
-export PATH=/home/dpi/.opencode/bin:$PATH
-. "$HOME/.cargo/env"
+if type opencode &>/dev/null; then
+	export PATH=/home/dpi/.opencode/bin:$PATH
+	. "$HOME/.cargo/env"
+fi
