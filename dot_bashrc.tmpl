@@ -32,9 +32,6 @@ else
     start_agent
 fi
 
-# Ensure the key is loaded
-ssh-add -l > /dev/null 2>&1 || ssh-add ~/.ssh/id_ed25519
-
 # if [ -f ~/.dotfiles/git.helpers.bash ]; then
 #   . ~/.dotfiles/git.helpers.bash
 # fi
