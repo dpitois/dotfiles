@@ -1,0 +1,38 @@
+[user]
+	name = David PITOIS
+	email = david.pitois@gmail.com
+
+[alias]
+	c = "!git fetch --all --prune && git status -sb"
+	l = "log --oneline"
+	s = status -sb
+	p = "remote prune origin"
+	f = "l main.."
+	ptags = "fetch --prune --prune-tags"
+	orphan = "!git branch -vv | grep 'origin/.*: gone'"
+	ls = log --oneline --abbrev-commit --format=format:'%C(bold blue)%h%C(reset) || %C(white)%s%C(reset) %C(dim green) || %an%C(reset)'
+	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all	
+	changelog-between = "!f() { git log --merges --oneline ${1}.. --pretty=format:%s | sed -E 's/Merged PR ([0-9]+): (.*)/\\2 (!\\1)/' | sort; }; f"
+	cl = "!f() { git log --merges --oneline HEAD~1..dev --pretty=format:%s | sed -E 's/Merged PR ([0-9]+): (.*)/\\2 (!\\1)/' | sort; }; f"
+    late = !git log --all --date=iso-local --pretty=format:\"The author of %h was %an, %ad\" | grep -E \"( (20|21|22|23|00|01|02|03|04|05|06):)\"
+	# contributors = "!git log $1 --pretty=format:\"%an <%ae>\" | sort | uniq -c | sort -nr"
+	contributors = "!f() { git log \"$@\" --pretty=format:\"%an <%ae>\" | sort | uniq -c | sort -nr; }; f"
+
+[rebase]
+	autoSquash = true
+
+[pull]
+	rebase = true
+	
+[push]
+	# autoSetupRemote = true
+	default = current
+
+[init]
+	defaultBranch = main
+# [credential]
+#     helper = "~/.local/bin/git-credential-manager"
+[credential]
+    helper = "!f() { /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe $@; }; f"
+[credential "https://dev.azure.com"]
+	useHttpPath = true

@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  tasks:
+
+    - name: Check if powerline-shell command exists
+      command: which powerline-shell
+      register: powerline_shell_check
+      ignore_errors: yes
+    - name: Install powerline-shell via pip
+      pip:
+        name: powerline-shell
+        state: present
+      when: powerline_shell_check.rc != 0 
+
+    - name: Check if chezmoi command exists
+      command: which chezmoi
+      register: chezmoi_check
+      ignore_errors: yes
+    - name: Install chezmoi
+      ansible.builtin.shell: sh -c "$(curl -fsLS get.chezmoi.io)"
+      when: chezmoi_check.rc != 0 
+
+    # - name: Gather the package facts
+    #   ansible.builtin.package_facts:
+    #     manager: auto
+
+    # - name: Check whether a package called bat is installed
+    #   when: "'bat' not in ansible_facts.packages"
+    #   ansible.builtin.apt:
+    #     name: bat
+    #   # ansible.builtin.debug:
+    #   #   msg: "{{ ansible_facts.packages['bat'] | length }} versions of bat are installed!"

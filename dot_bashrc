@@ -1,0 +1,71 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+if [ -f ~/.dotfiles/autocompletes.bash ]; then
+	. ~/.dotfiles/autocompletes.bash
+fi
+
+if [ -f ~/.dotfiles/aliases.bash ]; then
+	. ~/.dotfiles/aliases.bash
+fi
+
+# if [ -f ~/.dotfiles/git.helpers.bash ]; then
+#   . ~/.dotfiles/git.helpers.bash
+# fi
+
+function _update_ps1() {
+	if [ -f ~/.local/bin/powerline-shell ]; then
+		PS1=$(powerline-shell $?)
+	fi
+}
+
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+	PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+	PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+	for rc in ~/.bashrc.d/*; do
+		if [ -f "$rc" ]; then
+			. "$rc"
+		fi
+	done
+fi
+
+unset rc
+
+# pnpm
+export PNPM_HOME="/home/dpi/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# export PATH="$PATH:$HOME/.dotnet"
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+
+# Added by get-aspire-cli.sh
+export PATH="$HOME/.aspire/bin:$PATH"
+
+# opencode
+export PATH=/home/dpi/.opencode/bin:$PATH
+. "$HOME/.cargo/env"

@@ -1,0 +1,5 @@
+:set number
+:set relativenumber
+:set mouse=a
+:set colorcolumn=100
+:highlight ColorColumn ctermbg=lightgrey guibg=#000000
