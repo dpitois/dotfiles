@@ -20,7 +20,6 @@ function start_agent {
     ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
     chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" > /dev/null
-    ssh-add ~/.ssh/id_ed25519
 }
 
 if [ -f "${SSH_ENV}" ]; then
@@ -32,6 +31,9 @@ if [ -f "${SSH_ENV}" ]; then
 else
     start_agent
 fi
+
+# Ensure the key is loaded
+ssh-add -l > /dev/null 2>&1 || ssh-add ~/.ssh/id_ed25519
 
 # if [ -f ~/.dotfiles/git.helpers.bash ]; then
 #   . ~/.dotfiles/git.helpers.bash
