@@ -17,8 +17,21 @@ When you initialize `chezmoi` on a new machine, it will interactively prompt you
 sh -c "$(curl -fsLS get.chezmoi.io)"
 
 # Initialize and apply (replace with your repo URL)
-chezmoi init --apply https://github.com/your-username/dotfiles.git
+chezmoi init --apply https://github.com/dpitois/dotfiles.git
 ```
+
+### SSH & Commit Signing (Optional but Recommended)
+
+To securely push changes and sign your commits without entering credentials every time:
+
+1. **Generate a unique SSH key** for this machine:
+   ```bash
+   ssh-keygen -t ed25519 -C "github-$(hostname)" -f ~/.ssh/id_ed25519
+   ```
+2. **Add the public key to GitHub**:
+   Copy the output of `cat ~/.ssh/id_ed25519.pub` to your [GitHub SSH keys](https://github.com/settings/keys) as an **Authentication Key** (and optionally as a **Signing Key**).
+3. **Enjoy Transparency**:
+   Once `chezmoi apply` is run, Git will automatically use SSH for all GitHub interactions (even for repos cloned via HTTPS) thanks to the `insteadOf` configuration.
 
 ### Changing your configuration
 
